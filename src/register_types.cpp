@@ -1,6 +1,8 @@
 #include "register_types.h"
 
 #include "gdexample.h"
+#include "protagonist.h"
+#include "godot_cpp/core/class_db.hpp"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -14,6 +16,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
 	}
 
 	GDREGISTER_RUNTIME_CLASS(GDExample);
+	GDREGISTER_RUNTIME_CLASS(Protagonist);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

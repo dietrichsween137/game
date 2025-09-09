@@ -1,3 +1,7 @@
 [submodule "shotgun-game/aseprite"]
 	path = shotgun-game/aseprite
 	url = git@github.com-aseprite:dietrichsween137/aseprite.git
+[submodule "godot-cpp"]
+	path = godot-cpp
+	url = https://github.com/godotengine/godot-cpp.git
+	branch = 4.4
