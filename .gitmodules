@@ -1,7 +1,7 @@
 [submodule "godot-cpp"]
 	path = godot-cpp
-	url = https://github.com/godotengine/godot-cpp.git
+	url = git@github.com:dietrichsween137/godot-cpp.git
 	branch = 4.4
 [submodule "shotgun-game/aseprite"]
 	path = shotgun-game/aseprite
-	url = git@github.com-aseprite:dietrichsween137/aseprite.git
+	url = git@github.com:dietrichsween137/aseprite.git
