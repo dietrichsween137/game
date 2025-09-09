@@ -1,3 +1,5 @@
+# Godot
 .cache
 .sconsign.dblite
 .godot
+*.so
