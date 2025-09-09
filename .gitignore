@@ -3,3 +3,4 @@
 .godot
 *.so
 *.os
+extension_api.json
