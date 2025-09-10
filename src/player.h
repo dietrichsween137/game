@@ -1,20 +1,20 @@
-#ifndef	PROTAGONIST_H
-#define	PROTAGONIST_H
+#ifndef PLAYER_H	
+#define PLAYER_H	
 
 #include "godot_cpp/classes/character_body2d.hpp"
 
 namespace godot {
 
-class Protagonist : public CharacterBody2D {
-	GDCLASS(Protagonist, CharacterBody2D)
+class Player : public CharacterBody2D {
+	GDCLASS(Player, CharacterBody2D)
 private:
 	double ground_speed;
 	double ground_accel;
 protected:
 	static void _bind_methods();
 public:
-	Protagonist();
-	~Protagonist();
+	Player();
+	~Player();
 
 	void _physics_process(double delta) override;
 

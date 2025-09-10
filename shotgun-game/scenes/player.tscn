@@ -1,0 +1,22 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcagmydpuoyx1"]
+
+[sub_resource type="Animation" id="Animation_u8vuu"]
+resource_name = "idle"
+
+[sub_resource type="Animation" id="Animation_3vyb7"]
+resource_name = "walk"
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_g2els"]
+_data = {
+&"idle": SubResource("Animation_u8vuu"),
+&"walk": SubResource("Animation_3vyb7")
+}
+
+[node name="Player" type="Player"]
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+&"": SubResource("AnimationLibrary_g2els")
+}
