@@ -3,7 +3,6 @@
 #include "gdexample.h"
 #include "player.h"
 #include "state.h"
-#include "pstate.h"
 #include "godot_cpp/core/class_db.hpp"
 
 #include <gdextension_interface.h>
@@ -22,8 +21,6 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_RUNTIME_CLASS(StateMachine);
 	GDREGISTER_ABSTRACT_CLASS(State);
 	GDREGISTER_CLASS(PStateIdle);
-	GDREGISTER_CLASS(PStateWalkRight);
-	GDREGISTER_CLASS(PStateWalkLeft);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

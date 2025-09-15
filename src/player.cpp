@@ -1,4 +1,5 @@
 #include "player.h"
+#include "state.h"
 #include "godot_cpp/core/object.hpp"
 #include "godot_cpp/core/property_info.hpp"
 #include <godot_cpp/core/class_db.hpp>
@@ -18,7 +19,12 @@ void Player::_bind_methods() {
 Player::Player(): ground_accel {10.0}, ground_speed {100.0} {}
 Player::~Player() {}
 
+void Player::_ready() {
+	state_machine = get_node<StateMachine>("StateMachine");
+}
+
 void Player::_physics_process(double delta) {
+	state_machine->physics_update(delta);
 }
 
 void Player::set_ground_accel(double p_ground_accel) {

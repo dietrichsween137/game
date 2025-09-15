@@ -2,12 +2,14 @@
 #define PLAYER_H	
 
 #include "godot_cpp/classes/character_body2d.hpp"
+#include "state.h"
 
 namespace godot {
 
 class Player : public CharacterBody2D {
 	GDCLASS(Player, CharacterBody2D)
 private:
+	const StateMachine* state_machine;
 	double ground_speed;
 	double ground_accel;
 protected:
@@ -15,7 +17,8 @@ protected:
 public:
 	Player();
 	~Player();
-
+	
+	void _ready() override;
 	void _physics_process(double delta) override;
 
 	void set_ground_speed(const double p_ground_speed);

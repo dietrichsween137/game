@@ -12,21 +12,29 @@ protected:
 	static void _bind_methods() {};
 public:
 	virtual void physics_update(double delta) = 0;
-	void start_state() {};
-	virtual void end_state(String next_state) = 0;
 };
 
 class StateMachine : public Node {
 	GDCLASS(StateMachine, Node);
 private:
-	void (*physics_update_ptr)(double);
+	State* state;
 protected:
 	static void _bind_methods() {};
 public:
-	StateMachine(): physics_update_ptr {nullptr} {}
+	StateMachine(): state {nullptr} {} 
 	~StateMachine() {};
+
 	void _ready() override;
-	void switch_state(State& current_state, String next_state);
+	void switch_state(String next_state);
+	void physics_update(double delta) const;
+};
+
+class PStateIdle : public State {
+	GDCLASS(PStateIdle, State);
+protected:
+	static void _bind_methods() {};	
+public:
+	void physics_update(double delta) override;
 };
 
 }
