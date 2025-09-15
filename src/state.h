@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include "godot_cpp/classes/node.hpp"
+#include "godot_cpp/classes/wrapped.hpp"
 #include "godot_cpp/variant/packed_string_array.hpp"
 
 namespace godot {
@@ -19,7 +20,7 @@ class StateMachine : public Node {
 private:
 	State* state;
 protected:
-	static void _bind_methods() {};
+	static void _bind_methods();
 public:
 	StateMachine(): state {nullptr} {} 
 	~StateMachine() {};
@@ -32,7 +33,23 @@ public:
 class PStateIdle : public State {
 	GDCLASS(PStateIdle, State);
 protected:
-	static void _bind_methods() {};	
+	static void _bind_methods();
+public:
+	void physics_update(double delta) override;
+};
+
+class PStateWalkRight : public State {
+	GDCLASS(PStateWalkRight, State);
+protected:
+	static void _bind_methods();
+public:
+	void physics_update(double delta) override;
+};
+
+class PStateWalkLeft : public State {
+	GDCLASS(PStateWalkLeft, State);
+protected:
+	static void _bind_methods();
 public:
 	void physics_update(double delta) override;
 };
