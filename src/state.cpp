@@ -1,12 +1,12 @@
 #include "state.h"
 #include "godot_cpp/classes/animation_player.hpp"
+#include "godot_cpp/classes/input_event.hpp"
 #include "godot_cpp/core/class_db.hpp"
-#include "godot_cpp/core/object.hpp"
+#include "godot_cpp/core/math.hpp"
 #include "godot_cpp/core/property_info.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
 #include "godot_cpp/classes/input.hpp"
 #include "godot_cpp/classes/node.hpp"
-#include "godot_cpp/variant/variant_internal.hpp"
 
 using namespace godot;
 
@@ -53,12 +53,17 @@ void PStateIdle::enter() {
 }
 
 void PStateIdle::physics_update(double delta) {
-	static Input* input = Input::get_singleton();	
+	static Input* input = Input::get_singleton();
+	
+	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
-	if (input->is_action_pressed("right")) {
-		emit_signal("switch_state", "PStateWalkRight");
-	} else if (input->is_action_pressed("left")) {
-		emit_signal("switch_state", "PStateWalkLeft");
+	switch (horiz) {
+		case 1:
+			emit_signal("switch_state", "PStateWalkRight"); 
+			break;
+		case -1:
+			emit_signal("switch_state", "PStateWalkLeft");
+			break;
 	}
 }
 
@@ -73,13 +78,17 @@ void PStateWalkRight::enter() {
 }
 
 void PStateWalkRight::physics_update(double delta) {
-	static Input* input = Input::get_singleton();	
+	static Input* input = Input::get_singleton();
+	
+	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
-	if (input->is_action_pressed("right")) {
-	} else if (input->is_action_pressed("left")) {
-		emit_signal("switch_state", "PStateWalkLeft");
-	} else {
-		emit_signal("switch_state", "PStateIdle");
+	switch (horiz) {
+		case 0:
+			emit_signal("switch_state", "PStateIdle"); 
+			break;
+		case -1:
+			emit_signal("switch_state", "PStateWalkLeft");
+			break;
 	}
 }
 
@@ -94,12 +103,16 @@ void PStateWalkLeft::enter() {
 }
 
 void PStateWalkLeft::physics_update(double delta) {
-	static Input* input = Input::get_singleton();	
+	static Input* input = Input::get_singleton();
+	
+	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
-	if (input->is_action_pressed("left")) {
-	} else if (input->is_action_pressed("right")) {
-		emit_signal("switch_state", "PStateWalkRight");
-	} else {
-		emit_signal("switch_state", "PStateIdle");
+	switch (horiz) {
+		case 1:
+			emit_signal("switch_state", "PStateWalkRight"); 
+			break;
+		case 0:
+			emit_signal("switch_state", "PStateIdle");
+			break;
 	}
 }

@@ -2,6 +2,7 @@
 #define STATE_H
 
 #include "godot_cpp/classes/animation_player.hpp"
+#include "godot_cpp/classes/input_event.hpp"
 #include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/classes/sprite2d.hpp"
 #include "godot_cpp/classes/wrapped.hpp"
@@ -24,7 +25,8 @@ public:
 	AnimationPlayer* get_animation_player() {return animation_player;}
 	Sprite2D* get_sprite() {return sprite;}
 
-	virtual void enter() = 0;
+	virtual void enter() {};
+	virtual void handle_input(InputEvent event) {};
 	virtual void physics_update(double delta) = 0;
 };
 
@@ -48,7 +50,7 @@ class PStateIdle : public State {
 protected:
 	static void _bind_methods();
 public:
-	void enter();
+	void enter() override;
 	void physics_update(double delta) override;
 };
 
@@ -57,7 +59,7 @@ class PStateWalkRight : public State {
 protected:
 	static void _bind_methods();
 public:
-	void enter();
+	void enter() override;
 	void physics_update(double delta) override;
 };
 
@@ -66,7 +68,7 @@ class PStateWalkLeft : public State {
 protected:
 	static void _bind_methods();
 public:
-	void enter();
+	void enter() override;
 	void physics_update(double delta) override;
 };
 

@@ -11,7 +11,7 @@ config_version=5
 [application]
 
 config/name="shotgun-game"
-run/main_scene="uid://dcagmydpuoyx1"
+run/main_scene="uid://dxfq7nbiujf8q"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
 
