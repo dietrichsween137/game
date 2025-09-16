@@ -51,6 +51,15 @@ void PStateIdle::_bind_methods() {
 void PStateIdle::enter() {
 	UtilityFunctions::print(get_class());
 	State::get_animation_player()->clear_queue();
+	
+	String current_animation = State::get_animation_player()->get_current_animation();
+
+	if (current_animation == "walk_first_step") {
+		State::get_animation_player()->queue("walk_first_step_to_idle");
+	} else if (current_animation == "walk_second_step") {
+		State::get_animation_player()->queue("walk_second_step_to_idle");
+	}
+
 	State::get_animation_player()->queue("idle");
 }
 
