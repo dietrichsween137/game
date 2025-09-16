@@ -22,8 +22,8 @@ public:
 	~State() {};
 
 	void _ready() override;
-	AnimationPlayer* get_animation_player() {return animation_player;}
-	Sprite2D* get_sprite() {return sprite;}
+	AnimationPlayer* get_animation_player() const {return animation_player;}
+	Sprite2D* get_sprite() const {return sprite;}
 
 	virtual void enter() {};
 	virtual void handle_input(InputEvent event) {};
@@ -34,15 +34,16 @@ class StateMachine : public Node {
 	GDCLASS(StateMachine, Node);
 private:
 	State* state;
+	double last_delta;
 protected:
 	static void _bind_methods();
 public:
-	StateMachine(): state {nullptr} {} 
+	StateMachine(): state {nullptr}, last_delta {0} {} 
 	~StateMachine() {};
 
 	void _ready() override;
 	void switch_state(String next_state);
-	void physics_update(double delta) const;
+	void physics_update(double delta);
 };
 
 class PStateIdle : public State {

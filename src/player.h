@@ -10,8 +10,8 @@ namespace godot {
 class Player : public CharacterBody2D {
 	GDCLASS(Player, CharacterBody2D)
 private:
-	const StateMachine* state_machine;
-	const AnimationPlayer* animation_player;
+	StateMachine* state_machine;
+	AnimationPlayer* animation_player;
 	double ground_speed;
 	double ground_accel;
 protected:
