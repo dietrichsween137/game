@@ -97,7 +97,6 @@ void PStateWalkRight::physics_update(double delta) {
 	if (State::get_animation_player()->get_queue().size() == 0) {
 		State::get_animation_player()->queue("walk_first_step");
 		State::get_animation_player()->queue("walk_second_step");
-		UtilityFunctions::print(State::get_animation_player()->get_queue());
 	}
 
 }
