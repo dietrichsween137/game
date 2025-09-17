@@ -2,14 +2,13 @@
 #include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/input_event.hpp"
 #include "godot_cpp/core/class_db.hpp"
+#include "godot_cpp/core/math.hpp"
 #include "godot_cpp/core/property_info.hpp"
 #include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
 #include "godot_cpp/classes/input.hpp"
 #include "godot_cpp/classes/node.hpp"
 #include "godot_cpp/variant/variant.hpp"
-
-#include <tuple>
 
 using namespace godot;
 
@@ -68,6 +67,8 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 	}
 
 	PState::get_animation_player()->queue("idle");
+
+	PState::get_player()->set_velocity(Vector2(0, 0));
 }
 
 void PStateIdle::physics_update(double delta) {
@@ -120,6 +121,10 @@ void PStateWalkRight::physics_update(double delta) {
 		PState::get_animation_player()->queue("walk_second_step");
 	}
 
+	Vector2 velocity = PState::get_player()->get_velocity();
+	velocity.x = Math::min(velocity.x + PState::get_player()->get_ground_accel() * delta, PState::get_player()->get_ground_speed());
+	PState::get_player()->set_velocity(velocity);
+	PState::get_player()->move_and_slide();
 }
 
 void PStateWalkLeft::_bind_methods() {
@@ -157,4 +162,9 @@ void PStateWalkLeft::physics_update(double delta) {
 		PState::get_animation_player()->queue("walk_second_step");
 		UtilityFunctions::print(PState::get_animation_player()->get_queue());
 	}
+
+	Vector2 velocity = PState::get_player()->get_velocity();
+	velocity.x = Math::max(velocity.x - PState::get_player()->get_ground_accel() * delta, PState::get_player()->get_ground_speed());
+	PState::get_player()->set_velocity(velocity);
+	PState::get_player()->move_and_slide();
 }

@@ -12,12 +12,9 @@ void Player::_bind_methods() {
 	ClassDB::bind_method(D_METHOD("get_ground_speed"), &Player::get_ground_speed);
 	ClassDB::bind_method(D_METHOD("set_ground_speed", "p_ground_speed"), &Player::set_ground_speed);
 
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ground_accel"), "set_ground_accel", "get_ground_accel");
-	ADD_PROPERTY(PropertyInfo(Variant::FLOAT, "ground_speed"), "set_ground_speed", "get_ground_speed"); 
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "ground_accel"), "set_ground_accel", "get_ground_accel");
+	ADD_PROPERTY(PropertyInfo(Variant::INT, "ground_speed"), "set_ground_speed", "get_ground_speed"); 
 }
-
-Player::Player(): ground_accel {10.0}, ground_speed {100.0} {}
-Player::~Player() {}
 
 void Player::_ready() {
 	state_machine = get_node<StateMachine>("StateMachine");

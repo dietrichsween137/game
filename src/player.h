@@ -2,6 +2,7 @@
 #define PLAYER_H	
 
 #include "godot_cpp/classes/character_body2d.hpp"
+#include "godot_cpp/variant/vector2.hpp"
 
 namespace godot {
 
@@ -11,13 +12,14 @@ class Player : public CharacterBody2D {
 	GDCLASS(Player, CharacterBody2D)
 private:
 	StateMachine* state_machine;
-	double ground_speed;
-	double ground_accel;
+
+	int ground_speed;
+	int ground_accel;
 protected:
 	static void _bind_methods();
 public:
-	Player();
-	~Player();
+	Player(): ground_speed {100}, ground_accel {10} {}
+	~Player() {}
 	
 	void _ready() override;
 	void _physics_process(double delta) override;
