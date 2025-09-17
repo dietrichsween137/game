@@ -164,7 +164,7 @@ void PStateWalkLeft::physics_update(double delta) {
 	}
 
 	Vector2 velocity = PState::get_player()->get_velocity();
-	velocity.x = Math::max(velocity.x - PState::get_player()->get_ground_accel() * delta, PState::get_player()->get_ground_speed());
+	velocity.x = Math::max(velocity.x - PState::get_player()->get_ground_accel() * delta, -PState::get_player()->get_ground_speed());
 	PState::get_player()->set_velocity(velocity);
 	PState::get_player()->move_and_slide();
 }
