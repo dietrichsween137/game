@@ -21,7 +21,6 @@ Player::~Player() {}
 
 void Player::_ready() {
 	state_machine = get_node<StateMachine>("StateMachine");
-	animation_player = get_node<AnimationPlayer>("AnimationPlayer");
 }
 
 void Player::_physics_process(double delta) {

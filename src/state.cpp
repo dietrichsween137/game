@@ -3,14 +3,19 @@
 #include "godot_cpp/classes/input_event.hpp"
 #include "godot_cpp/core/class_db.hpp"
 #include "godot_cpp/core/property_info.hpp"
+#include "godot_cpp/variant/dictionary.hpp"
 #include "godot_cpp/variant/utility_functions.hpp"
 #include "godot_cpp/classes/input.hpp"
 #include "godot_cpp/classes/node.hpp"
+#include "godot_cpp/variant/variant.hpp"
+
+#include <tuple>
 
 using namespace godot;
 
 
-void State::_ready() {
+void PState::_ready() {
+	player = get_node<Player>("../..");
 	animation_player = get_node<AnimationPlayer>("../../AnimationPlayer");
 	sprite = get_node<Sprite2D>("../../Sprite2D");
 }
@@ -34,33 +39,35 @@ void StateMachine::_ready() {
 }
 
 void StateMachine::physics_update(double delta) {
-	last_delta = delta;
 	state->physics_update(delta);
 }
 
-void StateMachine::switch_state(String next_state) {
+void StateMachine::switch_state(String last_state, String next_state, Dictionary data) {
+	state->exit();
 	state = get_node<State>(next_state);
-	state->enter();
-	state->physics_update(last_delta);
+	state->enter(last_state, data);
 }
 
 void PStateIdle::_bind_methods() {
-	ADD_SIGNAL(MethodInfo("switch_state", PropertyInfo(Variant::STRING, "next_state")));
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateIdle::enter() {
+void PStateIdle::enter(String last_state, Dictionary data) {
 	UtilityFunctions::print(get_class());
-	State::get_animation_player()->clear_queue();
+	PState::get_animation_player()->clear_queue();
 	
-	String current_animation = State::get_animation_player()->get_current_animation();
+	String current_animation = PState::get_animation_player()->get_current_animation();
 
 	if (current_animation == "walk_first_step") {
-		State::get_animation_player()->queue("walk_first_step_to_idle");
+		PState::get_animation_player()->queue("walk_first_step_to_idle");
 	} else if (current_animation == "walk_second_step") {
-		State::get_animation_player()->queue("walk_second_step_to_idle");
+		PState::get_animation_player()->queue("walk_second_step_to_idle");
 	}
 
-	State::get_animation_player()->queue("idle");
+	PState::get_animation_player()->queue("idle");
 }
 
 void PStateIdle::physics_update(double delta) {
@@ -70,23 +77,28 @@ void PStateIdle::physics_update(double delta) {
 
 	switch (horiz) {
 		case 1:
-			emit_signal("switch_state", "PStateWalkRight"); 
+			emit_signal("switch_state", get_class(), "PStateWalkRight", Dictionary().get_or_add("delta", delta));
 			return;
 		case -1:
-			emit_signal("switch_state", "PStateWalkLeft");
+			emit_signal("switch_state", get_class(), "PStateWalkLeft", Dictionary().get_or_add("delta", delta));
 			return;
 	}
 }
 
 void PStateWalkRight::_bind_methods() {
-	ADD_SIGNAL(MethodInfo("switch_state", PropertyInfo(Variant::STRING, "next_state")));
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateWalkRight::enter() {
+void PStateWalkRight::enter(String last_state, Dictionary data) {
 	UtilityFunctions::print(get_class());
-	State::get_animation_player()->play("walk_first_step");
-	State::get_animation_player()->queue("walk_second_step");
-	State::get_sprite()->set_flip_h(false);
+	PState::get_animation_player()->play("walk_first_step");
+	PState::get_animation_player()->queue("walk_second_step");
+	PState::get_sprite()->set_flip_h(false);
+
+	physics_update(data["delta"]);
 }
 
 void PStateWalkRight::physics_update(double delta) {
@@ -96,29 +108,34 @@ void PStateWalkRight::physics_update(double delta) {
 
 	switch (horiz) {
 		case 0:
-			emit_signal("switch_state", "PStateIdle"); 
+			emit_signal("switch_state", get_class(), "PStateIdle", Dictionary().get_or_add("delta", delta)); 
 			return;
 		case -1:
-			emit_signal("switch_state", "PStateWalkLeft");
+			emit_signal("switch_state", get_class(), "PStateWalkLeft", Dictionary().get_or_add("delta", delta));
 			return;
 	}
 
-	if (State::get_animation_player()->get_queue().size() == 0) {
-		State::get_animation_player()->queue("walk_first_step");
-		State::get_animation_player()->queue("walk_second_step");
+	if (PState::get_animation_player()->get_queue().size() == 0) {
+		PState::get_animation_player()->queue("walk_first_step");
+		PState::get_animation_player()->queue("walk_second_step");
 	}
 
 }
 
 void PStateWalkLeft::_bind_methods() {
-	ADD_SIGNAL(MethodInfo("switch_state", PropertyInfo(Variant::STRING, "next_state")));
+	ADD_SIGNAL(MethodInfo("switch_state",
+		       PropertyInfo(Variant::STRING, "last_state"),
+		       PropertyInfo(Variant::STRING, "next_state"),
+		       PropertyInfo(Variant::DICTIONARY, "data")));
 }
 
-void PStateWalkLeft::enter() {
+void PStateWalkLeft::enter(String last_state, Dictionary data) {
 	UtilityFunctions::print(get_class());
-	State::get_animation_player()->play("walk_first_step");
-	State::get_animation_player()->queue("walk_second_step");
-	State::get_sprite()->set_flip_h(true);
+	PState::get_animation_player()->play("walk_first_step");
+	PState::get_animation_player()->queue("walk_second_step");
+	PState::get_sprite()->set_flip_h(true);
+
+	physics_update(data["delta"]);
 }
 
 void PStateWalkLeft::physics_update(double delta) {
@@ -128,16 +145,16 @@ void PStateWalkLeft::physics_update(double delta) {
 
 	switch (horiz) {
 		case 1:
-			emit_signal("switch_state", "PStateWalkRight"); 
+			emit_signal("switch_state", get_class(), "PStateWalkRight", Dictionary().get_or_add("delta", delta)); 
 			return;
 		case 0:
-			emit_signal("switch_state", "PStateIdle");
+			emit_signal("switch_state", get_class(), "PStateIdle", Dictionary().get_or_add("delta", delta));
 			return;
 	}
 
-	if (State::get_animation_player()->get_queue().size() == 0) {
-		State::get_animation_player()->queue("walk_first_step");
-		State::get_animation_player()->queue("walk_second_step");
-		UtilityFunctions::print(State::get_animation_player()->get_queue());
+	if (PState::get_animation_player()->get_queue().size() == 0) {
+		PState::get_animation_player()->queue("walk_first_step");
+		PState::get_animation_player()->queue("walk_second_step");
+		UtilityFunctions::print(PState::get_animation_player()->get_queue());
 	}
 }

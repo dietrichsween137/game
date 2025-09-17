@@ -1,17 +1,16 @@
 #ifndef PLAYER_H	
 #define PLAYER_H	
 
-#include "godot_cpp/classes/animation_player.hpp"
 #include "godot_cpp/classes/character_body2d.hpp"
-#include "state.h"
 
 namespace godot {
+
+class StateMachine;
 
 class Player : public CharacterBody2D {
 	GDCLASS(Player, CharacterBody2D)
 private:
 	StateMachine* state_machine;
-	AnimationPlayer* animation_player;
 	double ground_speed;
 	double ground_accel;
 protected:

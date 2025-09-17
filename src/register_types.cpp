@@ -20,6 +20,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
 	GDREGISTER_RUNTIME_CLASS(Player);
 	GDREGISTER_RUNTIME_CLASS(StateMachine);
 	GDREGISTER_ABSTRACT_CLASS(State);
+	GDREGISTER_ABSTRACT_CLASS(PState);
 	GDREGISTER_CLASS(PStateIdle);
 	GDREGISTER_CLASS(PStateWalkRight);
 	GDREGISTER_CLASS(PStateWalkLeft);
