@@ -42,7 +42,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_g2els"]
 resource_name = "walk_first_step_to_idle"
-length = 0.1
+length = 0.05
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false
@@ -76,7 +76,7 @@ tracks/0/keys = {
 
 [sub_resource type="Animation" id="Animation_dqkch"]
 resource_name = "walk_second_step_to_idle"
-length = 0.1
+length = 0.05
 step = 0.1
 tracks/0/type = "value"
 tracks/0/imported = false

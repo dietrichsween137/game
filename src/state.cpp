@@ -62,8 +62,10 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 
 	if (current_animation == "walk_first_step") {
 		PState::get_animation_player()->queue("walk_first_step_to_idle");
+		PState::get_animation_player()->set_speed_scale(2.0);
 	} else if (current_animation == "walk_second_step") {
 		PState::get_animation_player()->queue("walk_second_step_to_idle");
+		PState::get_animation_player()->set_speed_scale(2.0);
 	}
 
 	PState::get_animation_player()->queue("idle");
@@ -71,18 +73,28 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 	PState::get_player()->set_velocity(Vector2(0, 0));
 }
 
+void PStateIdle::exit() {
+	PState::get_animation_player()->set_speed_scale(1.0);
+}
+
 void PStateIdle::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
+	Dictionary dict = Dictionary();
+	dict["delta"] = delta;
 	
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
 	switch (horiz) {
 		case 1:
-			emit_signal("switch_state", get_class(), "PStateWalkRight", Dictionary().get_or_add("delta", delta));
+			emit_signal("switch_state", get_class(), "PStateWalkRight", dict);
 			return;
 		case -1:
-			emit_signal("switch_state", get_class(), "PStateWalkLeft", Dictionary().get_or_add("delta", delta));
+			emit_signal("switch_state", get_class(), "PStateWalkLeft", dict);
 			return;
+	}
+
+	if (PState::get_animation_player()->get_current_animation() == "idle") {
+		PState::get_animation_player()->set_speed_scale(1.0);
 	}
 }
 
@@ -104,15 +116,17 @@ void PStateWalkRight::enter(String last_state, Dictionary data) {
 
 void PStateWalkRight::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
+	Dictionary dict = Dictionary();
+	dict["delta"] = delta;
 	
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
 	switch (horiz) {
 		case 0:
-			emit_signal("switch_state", get_class(), "PStateIdle", Dictionary().get_or_add("delta", delta)); 
+			emit_signal("switch_state", get_class(), "PStateIdle", dict); 
 			return;
 		case -1:
-			emit_signal("switch_state", get_class(), "PStateWalkLeft", Dictionary().get_or_add("delta", delta));
+			emit_signal("switch_state", get_class(), "PStateWalkLeft", dict); 
 			return;
 	}
 
@@ -145,15 +159,17 @@ void PStateWalkLeft::enter(String last_state, Dictionary data) {
 
 void PStateWalkLeft::physics_update(double delta) {
 	static Input* input = Input::get_singleton();
+	Dictionary dict = Dictionary();
+	dict["delta"] = delta;
 	
 	int horiz = static_cast<int>(input->get_axis("left", "right"));
 
 	switch (horiz) {
 		case 1:
-			emit_signal("switch_state", get_class(), "PStateWalkRight", Dictionary().get_or_add("delta", delta)); 
+			emit_signal("switch_state", get_class(), "PStateWalkRight", dict); 
 			return;
 		case 0:
-			emit_signal("switch_state", get_class(), "PStateIdle", Dictionary().get_or_add("delta", delta));
+			emit_signal("switch_state", get_class(), "PStateIdle", dict); 
 			return;
 	}
 
