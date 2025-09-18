@@ -106,7 +106,6 @@ _data = {
 texture = ExtResource("1_3vyb7")
 hframes = 8
 vframes = 4
-frame = 16
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 visible = false

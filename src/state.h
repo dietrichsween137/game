@@ -58,6 +58,8 @@ public:
 
 class PStateIdle : public PState {
 	GDCLASS(PStateIdle, PState);
+private:
+	void set_animation_finish_time(float time);
 protected:
 	static void _bind_methods();
 public:

@@ -47,6 +47,14 @@ void StateMachine::switch_state(String last_state, String next_state, Dictionary
 	state->enter(last_state, data);
 }
 
+void PStateIdle::set_animation_finish_time(float time) {
+	float remaining_time = animation_player->get_current_animation_length() - animation_player->get_current_animation_position();
+	UtilityFunctions::print(remaining_time);
+	if (remaining_time > time) {
+		animation_player->set_speed_scale(remaining_time / time);
+	}
+}
+
 void PStateIdle::_bind_methods() {
 	ADD_SIGNAL(MethodInfo("switch_state",
 		       PropertyInfo(Variant::STRING, "last_state"),
@@ -61,11 +69,17 @@ void PStateIdle::enter(String last_state, Dictionary data) {
 	String current_animation = animation_player->get_current_animation();
 
 	if (current_animation == "walk_first_step") {
+		if (animation_player->get_current_animation_position() < .2) {
+			animation_player->seek(.3);
+		}
 		animation_player->queue("walk_first_step_to_idle");
-		animation_player->set_speed_scale(2.0);
+		set_animation_finish_time(.1);
 	} else if (current_animation == "walk_second_step") {
+		if (animation_player->get_current_animation_position() < .2) {
+			animation_player->seek(.3);
+		}
 		animation_player->queue("walk_second_step_to_idle");
-		animation_player->set_speed_scale(2.0);
+		set_animation_finish_time(.1);
 	}
 
 	animation_player->queue("idle");
