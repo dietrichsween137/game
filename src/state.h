@@ -43,20 +43,17 @@ public:
 
 class PState : public State {
 	GDCLASS(PState, State);
-private:
+protected:
 	Player* player;
 	AnimationPlayer* animation_player;
 	Sprite2D* sprite;
-protected:
+
 	static void _bind_methods() {};
 public:
 	PState(): player {nullptr}, animation_player {nullptr}, sprite {nullptr} {}
 	~PState() {}
 
 	void _ready() override;
-	Player* get_player() const {return player;}
-	AnimationPlayer* get_animation_player() const {return animation_player;}
-	Sprite2D* get_sprite() const {return sprite;}
 };
 
 class PStateIdle : public PState {

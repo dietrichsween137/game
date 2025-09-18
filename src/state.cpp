@@ -56,25 +56,25 @@ void PStateIdle::_bind_methods() {
 
 void PStateIdle::enter(String last_state, Dictionary data) {
 	UtilityFunctions::print(get_class());
-	PState::get_animation_player()->clear_queue();
+	animation_player->clear_queue();
 	
-	String current_animation = PState::get_animation_player()->get_current_animation();
+	String current_animation = animation_player->get_current_animation();
 
 	if (current_animation == "walk_first_step") {
-		PState::get_animation_player()->queue("walk_first_step_to_idle");
-		PState::get_animation_player()->set_speed_scale(2.0);
+		animation_player->queue("walk_first_step_to_idle");
+		animation_player->set_speed_scale(2.0);
 	} else if (current_animation == "walk_second_step") {
-		PState::get_animation_player()->queue("walk_second_step_to_idle");
-		PState::get_animation_player()->set_speed_scale(2.0);
+		animation_player->queue("walk_second_step_to_idle");
+		animation_player->set_speed_scale(2.0);
 	}
 
-	PState::get_animation_player()->queue("idle");
+	animation_player->queue("idle");
 
-	PState::get_player()->set_velocity(Vector2(0, 0));
+	player->set_velocity(Vector2(0, 0));
 }
 
 void PStateIdle::exit() {
-	PState::get_animation_player()->set_speed_scale(1.0);
+	animation_player->set_speed_scale(1.0);
 }
 
 void PStateIdle::physics_update(double delta) {
@@ -93,8 +93,8 @@ void PStateIdle::physics_update(double delta) {
 			return;
 	}
 
-	if (PState::get_animation_player()->get_current_animation() == "idle") {
-		PState::get_animation_player()->set_speed_scale(1.0);
+	if (animation_player->get_current_animation() == "idle") {
+		animation_player->set_speed_scale(1.0);
 	}
 }
 
@@ -107,9 +107,9 @@ void PStateWalkRight::_bind_methods() {
 
 void PStateWalkRight::enter(String last_state, Dictionary data) {
 	UtilityFunctions::print(get_class());
-	PState::get_animation_player()->play("walk_first_step");
-	PState::get_animation_player()->queue("walk_second_step");
-	PState::get_sprite()->set_flip_h(false);
+	animation_player->play("walk_first_step");
+	animation_player->queue("walk_second_step");
+	sprite->set_flip_h(false);
 
 	physics_update(data["delta"]);
 }
@@ -130,15 +130,15 @@ void PStateWalkRight::physics_update(double delta) {
 			return;
 	}
 
-	if (PState::get_animation_player()->get_queue().size() == 0) {
-		PState::get_animation_player()->queue("walk_first_step");
-		PState::get_animation_player()->queue("walk_second_step");
+	if (animation_player->get_queue().size() == 0) {
+		animation_player->queue("walk_first_step");
+		animation_player->queue("walk_second_step");
 	}
 
-	Vector2 velocity = PState::get_player()->get_velocity();
-	velocity.x = Math::min(velocity.x + PState::get_player()->get_ground_accel() * delta, PState::get_player()->get_ground_speed());
-	PState::get_player()->set_velocity(velocity);
-	PState::get_player()->move_and_slide();
+	Vector2 velocity = player->get_velocity();
+	velocity.x = Math::min(velocity.x + player->get_ground_accel() * delta, player->get_ground_speed());
+	player->set_velocity(velocity);
+	player->move_and_slide();
 }
 
 void PStateWalkLeft::_bind_methods() {
@@ -150,9 +150,9 @@ void PStateWalkLeft::_bind_methods() {
 
 void PStateWalkLeft::enter(String last_state, Dictionary data) {
 	UtilityFunctions::print(get_class());
-	PState::get_animation_player()->play("walk_first_step");
-	PState::get_animation_player()->queue("walk_second_step");
-	PState::get_sprite()->set_flip_h(true);
+	animation_player->play("walk_first_step");
+	animation_player->queue("walk_second_step");
+	sprite->set_flip_h(true);
 
 	physics_update(data["delta"]);
 }
@@ -173,14 +173,13 @@ void PStateWalkLeft::physics_update(double delta) {
 			return;
 	}
 
-	if (PState::get_animation_player()->get_queue().size() == 0) {
-		PState::get_animation_player()->queue("walk_first_step");
-		PState::get_animation_player()->queue("walk_second_step");
-		UtilityFunctions::print(PState::get_animation_player()->get_queue());
+	if (animation_player->get_queue().size() == 0) {
+		animation_player->queue("walk_first_step");
+		animation_player->queue("walk_second_step");
 	}
 
-	Vector2 velocity = PState::get_player()->get_velocity();
-	velocity.x = Math::max(velocity.x - PState::get_player()->get_ground_accel() * delta, -PState::get_player()->get_ground_speed());
-	PState::get_player()->set_velocity(velocity);
-	PState::get_player()->move_and_slide();
+	Vector2 velocity = player->get_velocity();
+	velocity.x = Math::max(velocity.x - player->get_ground_accel() * delta, -player->get_ground_speed());
+	player->set_velocity(velocity);
+	player->move_and_slide();
 }
