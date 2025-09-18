@@ -49,7 +49,6 @@ void StateMachine::switch_state(String last_state, String next_state, Dictionary
 
 void PStateIdle::set_animation_finish_time(float time) {
 	float remaining_time = animation_player->get_current_animation_length() - animation_player->get_current_animation_position();
-	UtilityFunctions::print(remaining_time);
 	if (remaining_time > time) {
 		animation_player->set_speed_scale(remaining_time / time);
 	}
